@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {locations} from './location'
-import escapeRegExp from 'escape-string-regexp'
 
 class Map extends Component {
     constructor(props) {
@@ -10,16 +9,12 @@ class Map extends Component {
             map: '',  
             infoWindow: '',
             previousMarker: '',
-            markers: [],
-            filterLocations: {},
             query: ''
         }
         this.initMap = this.initMap.bind(this);
         this.openInfoWindow = this.openInfoWindow.bind(this);
         this.closeInfoWindow = this.closeInfoWindow.bind(this);
-        this.filter = this.filter.bind(this);
         this.updateQuery = this.updateQuery.bind(this);
-        this.resetQuery = this.resetQuery.bind(this);
     }
 
     componentDidMount() {
@@ -29,10 +24,16 @@ class Map extends Component {
 
     updateQuery = (query) => {
         this.setState({query: query.trim()})
-    }
 
-    resetQuery = () => {
-        this.setState({query: ''})
+        this.closeInfoWindow();
+
+        this.state.locations.map(location => {
+            if(location.title.toLowerCase().indexOf(query.toLowerCase()) >= 0){
+                location.marker.setVisible(true);
+            }else{
+                location.marker.setVisible(false);
+            }
+        })
     }
 
     initMap() {
@@ -50,7 +51,7 @@ class Map extends Component {
             infoWindow: infoWindow
         })
 
-        this.state.filterLocations.map(location => {
+        this.state.locations.map(location => {
             let marker = new window.google.maps.Marker({
                 position: new window.google.maps.LatLng(location.lat, location.lng),
                 map: map,
@@ -65,17 +66,8 @@ class Map extends Component {
                 map.fitBounds(bounds);
             });
 
-            this.state.markers.push(marker);
+            location.marker = marker;
         })        
-    }
-
-    filter(query) {
-       if(query) {
-        const match = new RegExp(escapeRegExp(query), 'i');
-        this.state.filterLocations = locations.filter(location => match.test(location.title))
-       }else{
-           this.state.filterLocations = locations
-       }
     }
 
     openInfoWindow(marker) {
@@ -107,13 +99,11 @@ class Map extends Component {
     render() {        
         const {query} = this.state
 
-        this.filter(query);
-
-const locationList = this.state.filterLocations.map(location => {
-    return (
-        <li key={location.id} id={location.id} name={location.title}>{location.title}</li>
-    )
-})
+        const locationList = this.state.locations.map(location => {
+             return (
+                <li key={location.id} id={location.id} name={location.title}>{location.title}</li>
+                )
+        })
 
         return (
             <div>
@@ -124,7 +114,7 @@ const locationList = this.state.filterLocations.map(location => {
                     aria-label='Search restaurants'
                     role="search"
                     tabIndex='1'
-                    value={query}
+                    value={this.state.query}
                     onChange={(event) => this.updateQuery(event.target.value)}               
                    />
                     <ul className='location-list' aria-label='List of restaurants'>
@@ -142,10 +132,8 @@ export default Map;
 function loadJS(src) {
     const ref = window.document.getElementsByTagName("script")[0];
     const script = window.document.createElement("script");
-    console.log(script);
     script.src = src;
     script.async = true;
     script.defer = true;
     ref.parentNode.insertBefore(script, ref);
-    console.log(ref.parentNode)
 }
