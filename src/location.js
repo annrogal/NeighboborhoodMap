@@ -14,7 +14,7 @@ const locations = [
         id: 2
     },
     {
-        title: 'tratoria La Fortuna',
+        title: 'Tratoria La Fortuna',
         lat: 54.519709,
         lng: 18.542056,
         address: 'Armii Krajowej 9',
