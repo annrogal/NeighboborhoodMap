@@ -36,7 +36,6 @@ class Map extends Component {
     initMap() {
         const mapDiv = document.getElementById('map');
         let infoWindow = new window.google.maps.InfoWindow({});
-        let bounds = new window.google.maps.LatLngBounds();
 
         let map = new window.google.maps.Map(mapDiv, {
             center: {lat: 54.520498, lng: 18.539023},
@@ -61,8 +60,6 @@ class Map extends Component {
            
             marker.addListener('click', () => {
                 this.openInfoWindow(marker);
-                bounds.extend(marker.position);
-                map.fitBounds(bounds);
             });
 
             location.marker = marker;
