@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {locations} from './location'
+import SearchComponent from './SearchComponent';
 
 
 //class in which the map is initiated with marker and infoWindow
@@ -91,52 +92,15 @@ class Map extends Component {
         this.state.infoWindow.close();
     }
 
-
-
-    updateQuery = (query) => {
-        this.setState({query: query.trim()})
-
-        this.closeInfoWindow();
-
-        this.state.locations.map(location => {
-            if(location.title.toLowerCase().indexOf(query.toLowerCase()) >= 0){
-                location.marker.setVisible(true);
-            }else{
-                location.marker.setVisible(false);
-            }
-        })
-    }
-
-    onListClick(event) {
-        let clickedItem = this.state.locations.filter(location => location.title == event.getAttribute('name'));
-        this.openInfoWindow(clickedItem[0].marker)
-        
-    }
-
-    render() {        
-        const locationList = this.state.locations.map(location => {
-             return (
-                <li key={location.id} id={location.id} name={location.title} onClick={(event) => this.onListClick(event.target)}>{location.title}</li>
-                )
-        })
-
+    render() {       
         return (
             <div>
             <div ref="map" id="map" role="application" tabIndex='1' aria-label='Map of Gdynia'/>
-            <div className='search-bar'>
-                <div className='search-input'>
-                    <input type='text' placeholder='Search restaurant'
-                    aria-label='Search restaurants'
-                    role="search"
-                    tabIndex='2'
-                    value={this.state.query}
-                    onChange={(event) => this.updateQuery(event.target.value)}               
-                   />
-                    <ul className='location-list' aria-label='List of restaurants' tabIndex='3'>
-                        {locationList}
-                    </ul>
-                </div>
-            </div>
+            <SearchComponent 
+                locations={this.state.locations} 
+                openInfoWindow={this.openInfoWindow} 
+                closeInfoWindow={this.closeInfoWindow}
+            />
             </div>
         )
     }
@@ -144,6 +108,7 @@ class Map extends Component {
 
 export default Map;
 
+//function to asynchronous load map
 function loadJS(src) {
     const ref = window.document.getElementsByTagName("script")[0];
     const script = window.document.createElement("script");
