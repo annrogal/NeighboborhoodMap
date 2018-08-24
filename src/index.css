@@ -4,6 +4,7 @@ body {
   font-family: sans-serif;
 }
 
+/* Style for search bar */
 .search-bar {
   position: fixed;
   height: 100%;
@@ -25,6 +26,7 @@ body {
   margin: 10px;
 }
 
+/* Style for location list*/
 .location-list {
   padding-left: 0;
   text-align: center;
@@ -38,4 +40,41 @@ body {
 
 .location-list li:hover {
   cursor: pointer;
+  border: none;
+}
+
+/*Style for responsivnes*/
+@media screen and (max-width: 360px) {
+  #map {
+    width: 70% !important;
+    float: right;
+  }
+  .search-bar {
+    width: 30%;
+    display: flex;
+  }
+
+  .search-input input {
+    width: 80%;
+    font-size: 0.6em;
+  }
+
+  .location-list {
+    font-size: 14px;
+  }
+}
+
+@media screen and (min-width: 361px) and (max-width: 580px){
+  #map {
+    width: 70% !important;
+    float: right;
+  }
+  .search-bar {
+    width: 30%;
+    display: flex;
+  }
+
+  .search-input input {
+    width: 80%;
+  }
 }

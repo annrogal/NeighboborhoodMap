@@ -31,9 +31,8 @@ class SearchComponent extends Component {
 
     //function call when locatio in list clicked
     onListClick(event) {
-        let clickedItem = this.state.locations.filter(location => location.title == event.getAttribute('name'));
+        let clickedItem = this.state.locations.filter(location => location.title === event.getAttribute('name'));
         this.openInfoWindow(clickedItem[0].marker)
-        
     }
 
     render() {
@@ -53,7 +52,7 @@ class SearchComponent extends Component {
                 role="search"
                 tabIndex='2'
                 value={this.state.query}
-                onChange={(event) => this.updateQuery(event.target.value)}               
+                onChange={(event) => this.updateMarkers(event.target.value)}               
                />
                 <ul className='location-list' aria-label='List of restaurants' tabIndex='3'>
                     {locationList}

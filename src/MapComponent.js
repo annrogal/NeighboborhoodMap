@@ -17,14 +17,21 @@ class Map extends Component {
         this.initMap = this.initMap.bind(this);
         this.openInfoWindow = this.openInfoWindow.bind(this);
         this.closeInfoWindow = this.closeInfoWindow.bind(this);
+        this.mapFailure = this.mapFailure.bind(this);
     }
 
     //way to initialize the map from https://www.klaasnotfound.com/2016/11/06/making-google-maps-work-with-react/
     componentDidMount() {
         window.initMap = this.initMap;
-        loadJS("https://maps.googleapis.com/maps/api/js?key=AIzaSyBTy_Dyw1ErxbzVbY_S2w8Je1GgdearAuI&callback=initMap")
+        loadJS("https://maps.googleapis.com/maps/api/js?key=AIzaSyBTy_Dyw1ErxbzVbY_S2w8Je1GgdearAuI&callback=initMap", this.mapFailure())
     }
 
+    mapFailure() {
+        window.gm_authFailure = function() {
+            alert('Google maps failed to load!');
+            console.log('test')
+         }
+    }
 
     initMap() {
         const mapDiv = document.getElementById('map');
@@ -109,10 +116,11 @@ class Map extends Component {
 export default Map;
 
 //function to asynchronous load map
-function loadJS(src) {
+function loadJS(src, mapFailure) {
     const ref = window.document.getElementsByTagName("script")[0];
     const script = window.document.createElement("script");
     script.src = src;
+    script.onerror = mapFailure;
     script.async = true;
     script.defer = true;
     ref.parentNode.insertBefore(script, ref);
