@@ -1,5 +1,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/2e91372a84d9a8da0ba4/maintainability)](https://codeclimate.com/github/annrogal/NeighboborhoodMap/maintainability)
 
+[![Build Status](https://travis-ci.com/annrogal/MemoryGame.svg?branch=master)](https://travis-ci.com/annrogal/MemoryGame)
+
 # My favourite restaurants in Gdynia!
 
 This application is a final project of Udacity.
